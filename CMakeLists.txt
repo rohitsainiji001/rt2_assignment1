@@ -40,6 +40,21 @@ rclcpp_components_register_node(stateMachine_component
 ament_target_dependencies(positionService_component rclcpp rclcpp_components std_msgs)
 ament_target_dependencies(stateMachine_component rclcpp rclcpp_components std_msgs)
 
+install(TARGETS
+positionService_component
+stateMachine_component
+DESTINATION lib/${PROJECT_NAME}
+LIBRARY DESTINATION lib)
+
+install(
+DIRECTORY launch
+DESTINATION share/${PROJECT_NAME}
+)
+
+install(
+FILES mapping_rules.yaml
+DESTINATION share/${PROJECT_NAME})
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   # the following line skips the linter which checks for copyrights

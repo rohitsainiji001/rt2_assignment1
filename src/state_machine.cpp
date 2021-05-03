@@ -13,7 +13,7 @@ using std::placeholders::_1; // they will be replaced by the actual message duri
 using std::placeholders::_2;
 using std::placeholders::_3;
 
-namespace my_composition_package{
+namespace rt2_assignment1{
 class FSM : public rclcpp::Node
 {
 public:
@@ -91,4 +91,4 @@ private:
   
 };
 }
-RCLCPP_COMPONENTS_REGISTER_NODE(manual_composition_package::MinimalSubscriber)
+RCLCPP_COMPONENTS_REGISTER_NODE(rt2_assignment1::MinimalSubscriber)
