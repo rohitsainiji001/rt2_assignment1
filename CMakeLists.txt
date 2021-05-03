@@ -19,7 +19,26 @@ endif()
 find_package(ament_cmake REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
-# find_package(<dependency> REQUIRED)
+#find_package(<dependency> REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(rclcpp_components REQUIRED)
+
+add_library(positionService_component SHARED
+src/position_service.cpp)
+add_library(stateMachine_component SHARED
+src/state_machine.cpp)
+
+rclcpp_components_register_node(positionService_component
+    PLUGIN "rt2_assignment1::MinimalServer"
+    EXECUTABLE comp_positionService)
+
+rclcpp_components_register_node(stateMachine_component
+    PLUGIN "rt2_assignment1::MinimalSubscriber"
+    EXECUTABLE comp_stateMachine)
+
+ament_target_dependencies(positionService_component rclcpp rclcpp_components std_msgs)
+ament_target_dependencies(stateMachine_component rclcpp rclcpp_components std_msgs)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

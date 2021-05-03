@@ -3,6 +3,8 @@
 #include "rt2_assignment1/srv/position_server.hpp"
 #include "rt2_assignment1/srv/go_to_point.hpp"
 #include "rt2_assignment1/srv/user_interface.hpp"
+#include "rclcpp_components/register_node_macro.hpp"
+
 
 #include "rclcpp/rclcpp.hpp"
 
@@ -11,11 +13,12 @@ using std::placeholders::_1; // they will be replaced by the actual message duri
 using std::placeholders::_2;
 using std::placeholders::_3;
 
+namespace my_composition_package{
 class FSM : public rclcpp::Node
 {
 public:
-  FSM()
-  : Node("minimal_server")
+  FSM(const rclcpp::NodeOptions & options)
+  : Node("minimal_server", options)
   {
     service_ = this->create_service<Command>(
       "user_interface", std::bind(&FSM::handle_service, this, _1, _2, _3)); // callback
@@ -24,14 +27,15 @@ public:
      if (!rclcpp::ok()) {
       RCLCPP_ERROR(this->get_logger(), "client_1 interrupted while waiting for service to appear.");
       return;
-    }
+    }}
     RCLCPP_INFO(this->get_logger(), "waiting for service to appear...");
     client_2 = this->create_client<RandomPosition>("position_server"); 
     while (!client_2->wait_for_service(std::chrono::seconds(1))){
      if (!rclcpp::ok()) {
       RCLCPP_ERROR(this->get_logger(), "client_2 interrupted while waiting for service to appear.");
       return;
-    }
+    }}
+
     RCLCPP_INFO(this->get_logger(), "waiting for service to appear..."); 
 
   this->request_1 = std::make_shared<Position::Request>();
@@ -86,11 +90,5 @@ private:
   
   
 };
-
-int main(int argc, char * argv[])
-{
-  rclcpp::init(argc, argv);
-  rclcpp::spin(std::make_shared<FSM>());
-  rclcpp::shutdown();
-  return 0;
 }
+RCLCPP_COMPONENTS_REGISTER_NODE(manual_composition_package::MinimalSubscriber)
